@@ -47,10 +47,12 @@ spec:
       {{- end }}
       containers:
         - env:
+              {{- if not .Values.clearml.apiKeysSecretName }}
             - name: CLEARML_API_ACCESS_KEY
               value: "{{ .Values.clearml.apiAccessKey }}"
             - name: CLEARML_API_SECRET_KEY
               value: "{{ .Values.clearml.apiSecretKey }}"
+              {{- end }}
             - name: CLEARML_API_HOST
               value: "{{ .Values.clearml.apiHost }}"
             - name: CLEARML_FILES_HOST
@@ -74,6 +76,11 @@ spec:
             {{- with .Values.clearml_serving_statistics.extraEnvironment }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+          {{- if .Values.clearml.apiKeysSecretName }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.clearml.apiKeysSecretName }}
+          {{- end }}
           image: "{{ .Values.clearml_serving_statistics.image.repository }}:{{ .Values.clearml_serving_statistics.image.tag }}"
           name: {{ include "clearmlServing.fullname" . }}-statistics
           ports:

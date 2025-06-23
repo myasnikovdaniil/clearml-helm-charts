@@ -15,6 +15,10 @@ imageCredentials:
 
 # -- ClearMl generic configurations
 clearml:
+  # -- Secret name for api keypair, will be mounted to pods if not empty (if empty - keypair will be set via env vars directly)
+  apiKeysSecretName: "clearml-api-keys"
+  # -- Condition for creating secret with api keypair (if false - use existing secret)
+  createApiKeysSecret: true
   apiAccessKey: "ClearML API Access Key"
   apiSecretKey: "ClearML API Secret Key"
   apiHost: http://clearml-server-apiserver:8008
